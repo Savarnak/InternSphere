@@ -1,0 +1,108 @@
+const internships = [
+  {
+    id: '1',
+    title: 'Frontend Developer Intern',
+    company: 'TechNova',
+    location: 'Bengaluru',
+    mode: 'Hybrid',
+    source: 'LinkedIn',
+    skills: ['React', 'JavaScript', 'CSS', 'Tailwind'],
+    url: 'https://www.linkedin.com/jobs/',
+    postedAt: '2d ago',
+    description:
+      'Work with the frontend team to build responsive components, fix UI bugs, and improve performance. Collaborate with designers to translate Figma to pixel-perfect layouts. Skills: React, JavaScript, CSS, Tailwind, Git. Great for students who enjoy crafting beautiful interfaces and learning design systems. Growth: exposure to code reviews, design handoff, and performance optimization.',
+  },
+  {
+    id: '2',
+    title: 'Data Science Intern',
+    company: 'InsightAI',
+    location: 'Remote',
+    mode: 'Remote',
+    source: 'Company Site',
+    skills: ['Python', 'Pandas', 'ML', 'SQL'],
+    url: 'https://careers.example.com',
+    postedAt: '1d ago',
+    description:
+      'Analyze datasets to build predictive models. Responsibilities include cleaning data, feature engineering, and evaluating ML algorithms. Skills: Python, Pandas, ML, SQL, visualization. Who should apply: students with a strong math/stats foundation and curiosity for insights. Growth: hands-on with experiments, metrics, and MLOps basics.',
+  },
+  {
+    id: '3',
+    title: 'Backend Intern',
+    company: 'CloudBridge',
+    location: 'Hyderabad',
+    mode: 'Onsite',
+    source: 'Indeed',
+    skills: ['Node.js', 'Express', 'MongoDB', 'REST'],
+    url: 'https://in.indeed.com',
+    postedAt: '4d ago',
+    description:
+      'Build APIs and services used by web and mobile clients. You will write endpoints, integrate databases, and improve reliability. Skills: Node.js, Express, MongoDB, REST, testing. Who should apply: backend-leaning students who enjoy systems thinking. Growth: logging, monitoring, and deployment pipelines exposure.',
+  },
+  {
+    id: '4',
+    title: 'UI/UX Design Intern',
+    company: 'PixelCraft',
+    location: 'Mumbai',
+    mode: 'Hybrid',
+    source: 'Internshala',
+    skills: ['Figma', 'Prototyping', 'Wireframing'],
+    url: 'https://internshala.com',
+    postedAt: '3d ago',
+    description:
+      'Create wireframes, prototypes, and user flows for new features. Conduct user research and iterate on feedback. Skills: Figma, prototyping, wireframing, usability. Who should apply: visual thinkers excited by user-centric design. Growth: design critiques, accessibility, and design systems.',
+  },
+  {
+    id: '5',
+    title: 'Mobile App Intern',
+    company: 'AppWorks',
+    location: 'Pune',
+    mode: 'Onsite',
+    source: 'LinkedIn',
+    skills: ['React Native', 'TypeScript', 'API'],
+    url: 'https://www.linkedin.com/jobs/',
+    postedAt: '5d ago',
+    description:
+      'Help ship features in our cross-platform app. Work on screens, local storage, and API integrations. Skills: React Native, TypeScript, API, debugging. Who should apply: students keen on mobile UX and device testing. Growth: release process and crash analytics.',
+  },
+  {
+    id: '6',
+    title: 'DevOps Intern',
+    company: 'Pipeline Labs',
+    location: 'Chennai',
+    mode: 'Remote',
+    source: 'Company Site',
+    skills: ['Docker', 'CI/CD', 'AWS', 'Linux'],
+    url: 'https://careers.example.com',
+    postedAt: 'today',
+    description:
+      'Automate build and release pipelines. Manage containers and cloud resources. Skills: Docker, CI/CD, AWS, Linux, scripting. Who should apply: students who love tooling and infra. Growth: IaC, observability, and security basics.',
+  },
+  {
+    id: '7',
+    title: 'Full Stack Intern',
+    company: 'StackForge',
+    location: 'Delhi',
+    mode: 'Hybrid',
+    source: 'Indeed',
+    skills: ['React', 'Node.js', 'PostgreSQL', 'Tailwind'],
+    url: 'https://in.indeed.com',
+    postedAt: '1w ago',
+    description:
+      'Work across frontend and backend to build features end-to-end. Skills: React, Node.js, PostgreSQL, Tailwind, REST. Who should apply: builders who enjoy context switching. Growth: architecture, tradeoffs, and testing.',
+  },
+  {
+    id: '8',
+    title: 'Cybersecurity Intern',
+    company: 'ShieldSec',
+    location: 'Remote',
+    mode: 'Remote',
+    source: 'Internshala',
+    skills: ['Network Security', 'Python', 'SIEM'],
+    url: 'https://internshala.com',
+    postedAt: '2w ago',
+    description:
+      'Assist in monitoring, threat analysis, and security hygiene. Skills: Network Security, Python, SIEM, documentation. Who should apply: students who are detail-oriented and vigilant. Growth: incident response exposure and security tooling.',
+  },
+]
+
+export default internships
