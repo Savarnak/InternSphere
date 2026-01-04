@@ -1,17 +1,10 @@
 import React, { Fragment, useMemo, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { FiExternalLink, FiX, FiBookOpen, FiStar, FiUserCheck } from 'react-icons/fi'
+import { FiExternalLink, FiX } from 'react-icons/fi'
 import Badge from './Badge.jsx'
-import { explainFrom } from '../utils/explain.js'
 
 export default function RoleDetail({ open, onClose, item }) {
-  const [explain, setExplain] = useState(true)
-  const sections = useMemo(() => {
-    if (!item) return null
-    return explainFrom(item.description || '', item.skills || [])
-  }, [item])
-
   if (!item) return null
 
   return (
@@ -39,11 +32,11 @@ export default function RoleDetail({ open, onClose, item }) {
                       </button>
                       <div className="px-5 -mt-10">
                         <div className="flex items-start justify-between gap-3">
-                          <div className="min-w-0">
-                            <h3 className="text-2xl font-semibold tracking-tight break-words">{item.title}</h3>
-                            <p className="text-sm text-slate-100/90 break-words">{item.company}</p>
+                          <div className="flex-1 min-w-0">
+                            <h3 className="text-2xl font-semibold tracking-tight break-words text-white drop-shadow">{item.title}</h3>
+                            <p className="text-sm text-white/90 break-words whitespace-normal leading-snug">{item.company}</p>
                           </div>
-                          <div className="shrink-0">
+                          <div className="shrink-0 self-start">
                             <Badge variant={item.source}>{item.source}</Badge>
                           </div>
                         </div>
@@ -54,28 +47,18 @@ export default function RoleDetail({ open, onClose, item }) {
                       <div className="flex flex-wrap items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
                         <span className="px-2 py-1 rounded-md bg-slate-100 dark:bg-slate-800">{item.location}</span>
                         <span className="px-2 py-1 rounded-md bg-slate-100 dark:bg-slate-800">{item.mode}</span>
-                        {item.postedAt && <span className="px-2 py-1 rounded-md bg-slate-100 dark:bg-slate-800">{item.postedAt}</span>}
+                        {item.postedAt && (() => {
+                          const ts = Date.parse(item.postedAt)
+                          const nice = Number.isNaN(ts)
+                            ? item.postedAt
+                            : new Date(ts).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })
+                          return (
+                            <span className="px-2 py-1 rounded-md bg-slate-100 dark:bg-slate-800" title={item.postedAt}>{nice}</span>
+                          )
+                        })()}
                       </div>
 
-                      <div className="flex flex-wrap gap-2">
-                        {(item.skills || []).slice(0, 10).map((s) => (
-                          <span key={s} className="text-xs px-2 py-1 rounded-lg bg-brand-50 dark:bg-brand-900/40 text-brand-700 dark:text-brand-200 border border-brand-100 dark:border-brand-800">{s}</span>
-                        ))}
-                      </div>
-
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <button
-                            type="button"
-                            onClick={() => setExplain((v) => !v)}
-                            className={`inline-flex items-center gap-2 px-3 py-2 rounded-lg border transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 ${
-                              explain ? 'bg-brand-600 text-white border-brand-600' : 'bg-white/70 dark:bg-slate-800/60 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700'
-                            }`}
-                          >
-                            <FiBookOpen />
-                            <span>Explain this role</span>
-                          </button>
-                        </div>
+                      <div className="flex justify-end">
                         <a
                           href={item.url}
                           target="_blank"
@@ -88,32 +71,10 @@ export default function RoleDetail({ open, onClose, item }) {
                         </a>
                       </div>
 
-                      {!explain && item.description && (
-                        <p className="text-slate-700 dark:text-slate-200 leading-relaxed">{item.description}</p>
-                      )}
-
-                      {explain && sections && (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div className="rounded-xl p-4 bg-white/70 dark:bg-slate-900/50 border border-white/40 dark:border-white/10">
-                            <h4 className="font-medium flex items-center gap-2"><FiUserCheck /> What you’ll do</h4>
-                            <p className="mt-1 text-sm text-slate-700 dark:text-slate-300">{sections.what || 'Build features, fix bugs, and collaborate with the team.'}</p>
-                          </div>
-                          <div className="rounded-xl p-4 bg-white/70 dark:bg-slate-900/50 border border-white/40 dark:border-white/10">
-                            <h4 className="font-medium flex items-center gap-2"><FiStar /> Skills needed</h4>
-                            <div className="mt-1 flex flex-wrap gap-2">
-                              {sections.skills.map((s) => (
-                                <span key={s} className="text-xs px-2 py-1 rounded-lg bg-slate-100 dark:bg-slate-800">{s}</span>
-                              ))}
-                            </div>
-                          </div>
-                          <div className="rounded-xl p-4 bg-white/70 dark:bg-slate-900/50 border border-white/40 dark:border-white/10">
-                            <h4 className="font-medium">Who should apply</h4>
-                            <p className="mt-1 text-sm text-slate-700 dark:text-slate-300">{sections.who || 'Students excited to learn, collaborate, and ship user value.'}</p>
-                          </div>
-                          <div className="rounded-xl p-4 bg-white/70 dark:bg-slate-900/50 border border-white/40 dark:border-white/10">
-                            <h4 className="font-medium">Growth opportunities</h4>
-                            <p className="mt-1 text-sm text-slate-700 dark:text-slate-300">{sections.growth || 'Exposure to reviews, tooling, and modern practices.'}</p>
-                          </div>
+                      {item.description && (
+                        <div className="mt-4">
+                          <h4 className="font-medium mb-2">Job Description</h4>
+                          <p className="text-slate-700 dark:text-slate-200 leading-relaxed">{item.description}</p>
                         </div>
                       )}
                     </div>

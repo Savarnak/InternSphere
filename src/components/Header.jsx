@@ -13,7 +13,7 @@ export default function Header({ onOpenProfile, onOpenDashboard, searchValue, on
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
   return (
-    <header className={`sticky top-0 z-30 backdrop-blur bg-white/70 dark:bg-slate-950/60 border-b border-white/30 dark:border-white/10 shadow-glass transition-[padding] ${compact ? 'py-2' : 'py-3 md:py-4'}`}>
+    <header className={`fixed top-0 left-0 right-0 z-50 backdrop-blur bg-white/95 dark:bg-slate-950/95 border-b border-white/30 dark:border-white/10 shadow-lg transition-all duration-200 ${compact ? 'py-2' : 'py-3 md:py-4'}`}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3">
         <div className="flex items-center gap-2 min-w-0">
           <div className="p-1.5 rounded-xl bg-white/60 dark:bg-slate-900/60 border border-white/40 dark:border-white/10 shadow-glass">

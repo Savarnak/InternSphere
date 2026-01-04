@@ -4,6 +4,13 @@ function parsePostedAtScore(str = '') {
   const key = `pa:${str}`
   if (cache.has(key)) return cache.get(key)
   const s = (str || '').toString().toLowerCase().trim()
+  // ISO date handling
+  const ts = Date.parse(str)
+  if (!Number.isNaN(ts)) {
+    const score = ts // newer is larger
+    cache.set(key, score)
+    return score
+  }
   let days = 1000
   if (s === 'today') days = 0
   else if (/^(\d+)d/.test(s)) days = parseInt(s, 10)

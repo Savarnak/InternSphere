@@ -5,8 +5,7 @@ import Filters from './components/Filters.jsx'
 import FiltersInline from './components/FiltersInline.jsx'
 import InternshipCard from './components/InternshipCard.jsx'
 import EmptyState from './components/EmptyState.jsx'
-import Footer from './components/Footer.jsx'
-import internships from './data/internships.js'
+// Removed mock data import; live data will be fetched from backend
 import { filterInternships, getFacetOptions } from './utils/filter.js'
 import useFilters from './hooks/useFilters.js'
 import BackgroundDecor from './components/BackgroundDecor.jsx'
@@ -33,6 +32,9 @@ export default function App() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
   const [heroHidden, setHeroHidden] = useState(false)
   const [showFiltersDesktop, setShowFiltersDesktop] = useState(false)
+  const [jobs, setJobs] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
   const {
     query,
     setQuery,
@@ -65,20 +67,61 @@ export default function App() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [showFiltersDesktop])
 
-  const facets = useMemo(() => getFacetOptions(internships), [])
+  // Fetch internships from backend as the single source of truth
+  useEffect(() => {
+    const controller = new AbortController()
+    async function load() {
+      setLoading(true)
+      setError(null)
+      try {
+        const params = new URLSearchParams()
+        if (query) params.set('q', query)
+        const res = await fetch(`/api/jobs?${params.toString()}`, { signal: controller.signal })
+        if (!res.ok) throw new Error(`API error ${res.status}`)
+        const json = await res.json()
+        console.log('FETCHING FROM BACKEND')
+        const items = Array.isArray(json.items) ? json.items : []
+        // Map backend fields to UI model
+        const mapped = items.map((r) => ({
+          id: r.id,
+          title: r.title,
+          company: r.company,
+          location: r.location || '—',
+          mode: r.workMode || 'On-site',
+          postedAt: r.postedAt,
+          url: r.applyUrl,
+          source: r.source || 'JSearch',
+          skills: [],
+          description: '',
+        }))
+        setJobs(mapped)
+        setError(null)
+        console.log('FETCHING FROM BACKEND: received', mapped.length, 'items')
+      } catch (e) {
+        setJobs([])
+        setError(e.message || 'Failed to load jobs')
+      } finally {
+        setLoading(false)
+      }
+    }
+    load()
+    return () => controller.abort()
+  }, [query])
+
+  const facets = useMemo(() => getFacetOptions(jobs), [jobs])
   const filtered = useMemo(
     () =>
-      filterInternships(internships, {
+      filterInternships(jobs, {
         query,
         locations: selectedLocations,
         sources: selectedSources,
         modes: selectedModes,
         skills: selectedSkills,
       }),
-    [query, selectedLocations, selectedSources, selectedModes, selectedSkills]
+    [jobs, query, selectedLocations, selectedSources, selectedModes, selectedSkills]
   )
 
-  const recs = useMemo(() => recommendWithScores(profile, internships, 6), [profile])
+  const recs = useMemo(() => recommendWithScores(profile, jobs, 6), [profile, jobs])
   const maxRecScore = useMemo(() => {
     if (!recs || recs.length === 0) return 1
     return Math.max(...recs.map((r) => r.score), 1)
@@ -131,6 +174,11 @@ export default function App() {
       />
 
       <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {error && (
+          <div className="mt-4 rounded-lg border border-rose-200 dark:border-rose-800 bg-rose-50/70 dark:bg-rose-900/30 text-rose-800 dark:text-rose-200 px-4 py-3">
+            Failed to load internships: {error}
+          </div>
+        )}
         {!heroHidden && (
           <section className="mt-6 md:mt-10">
             <div className="glass-card rounded-2xl p-6 md:p-10 text-center">
@@ -183,6 +231,8 @@ export default function App() {
                     else setShowFiltersDesktop((v) => !v)
                   }}
                 />
+                {/* TEMP: render jobs count for verification */}
+                <p className="mt-1 text-xs text-slate-500">Jobs count: {jobs.length}</p>
                 {/* Desktop slide-down filters */}
                 {
                   <Transition
@@ -255,7 +305,6 @@ export default function App() {
         </section>
       </main>
 
-      <Footer />
 
       <StudentProfileDialog
         open={profileOpen}
